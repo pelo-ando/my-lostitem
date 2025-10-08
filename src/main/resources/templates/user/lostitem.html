@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th= "http://www.thymeleaf.org">
+<head th:replace="~{parts/common :: html_head()}"></head>
+<body>
+  <header th:replace="~{parts/common :: header()}"></header>
+
+  <div class="container">
+    <h1 class="my-4 h3">忘れ物登録リスト</h1>
+
+    <div class="row">
+      <div class="col-md-12">
+         <p>
+           <a th:href="@{/user/add}" class="btn btn-primary">忘れ物登録の追加</a>
+           <a th:href="@{/user/list}" class="btn btn-light">今はなし</a>
+         </p>
+        
+<!--        <div class="alert alert-success" th:if="${message}">-->
+<!--         [[${message}]]-->
+<!--        </div>-->
+        
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>内容</th>
+              <th>分類</th>
+              <th>拾得日</th>
+              <th>拾得場所</th>
+              <th>発見者</th>
+              <th>状態</th>
+              <th>保管場所</th>
+              <th>最終更新日</th>
+              <th>編集</th>
+              <th>状態（今はなし）</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="lostItem : ${lostItems}">
+	          <td><a th:href="@{/user/show/{id}(id=${lostItem.id})}">[[${lostItem.content}]]</a></td>
+	          <td>[[${lostItem.typeName}]]</td>
+	          <td>[[${#temporals.format(lostItem.findDate, 'yyyy年MM月dd日(E)')}]]</td>
+	          <td>[[${lostItem.areaName}]]</td>
+	          <td>[[${lostItem.findPersonName}]]</td>
+	          <td>[[${lostItem.status}]]</td>
+	          <td>[[${lostItem.strageName}]]</td>
+	          <td>[[${#temporals.format(lostItem.updateAt, 'yyyy年MM月dd日(E) hh:MM:dd')}]]</td>
+	          <td><a th:href="@{/user/edit-lostitem/{id}(id=${lostItem.id})}" class="btn btn-warning btn-sm">編集</a></td>
+	          <td><a th:href="@{/user/delete-lostitem/{id}(id=${lostItem.id})}" class="btn btn-danger btn-sm delete">削除</a></td>
+	        </tr>
+          </tbody>
+        </table>
+
+<!--        <div th:replace="~{widget/pagination :: pagination(${totalPages}, ${currentPage}, 'admin/material/list')}"></div>-->
+      </div><!-- /.col- -->
+    </div><!-- /.row -->
+  </div><!-- /.container -->
+  
+<!--  <th:block th:replace="~{admin/parts/common :: javascripts()}"></th:block>-->
+</body>
+</html>
