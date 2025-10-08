@@ -1,5 +1,24 @@
 <!DOCTYPE html>
 <html lang="ja" xmlns:th= "http://www.thymeleaf.org">
+<style>
+	.camera {
+		position:relative;
+		width:350px;
+		height:250px;
+	}
+	
+	#video {
+		position:absolute;
+		border: 1px solid#aaa;
+		width: 320px;
+		height: 240px;
+		z-index: 2;
+	}
+	#photo {
+		position:absolute;
+		z-index: 1;
+	}
+</style>
 <head th:replace="~{parts/common :: html_head()}"></head>
 <body>
   <header th:replace="~{parts/common :: header()}"></header>
@@ -33,9 +52,14 @@
                   <option th:each="type : ${itemTypeList}" th:value="${type.id}">[[${type.name}]]</option>
               </select>
           </p>
-
 					
-<!--      ここに写真ね！-->
+<!--      ここに写真ね"！-->
+					<div class="camera">
+						<video id="video"></video>
+						<img id="photo">
+					</div>					
+						<button id="camera-photo" type="button">ｶﾒﾗ起動</button>
+
           <div class="mb-3">
               <label>拾得者名：<input type="text" size="50" th:field="*{findPersonName}"></label>
 <!--              <div class="error-message mt-2" th:errors="*{findPersonName}"></div>-->
@@ -56,5 +80,89 @@
   </div><!-- /.container -->
 
   <th:block th:replace="~{parts/common :: javascripts()}"></th:block>
+	
+	<script>
+		const video = document.querySelector('#video');
+		const canvas = document.createElement('canvas');
+		const button = document.querySelector('#camera-photo');
+		let isCameraRunning = false;
+		
+		//initVideoCamera();
+		initPhoto();
+		// cameraの起動・静止を押したとき
+		button.addEventListener('click', () => {
+			if (isCameraRunning) {
+				getPhoto();
+				disableCamera();
+			} else {
+				enableCamera();
+				console.log("cameraStart");
+			}
+			isCameraRunning = !isCameraRunning;
+		});
+
+		
+		//カメラを有効にする
+		
+		function enableCamera() {
+		    button.disabled = true;		//	ボタンの連打防止
+				navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+		        .then((stream) => {
+		            video.srcObject = stream;
+		            video.play();
+								button.disabled = false;
+								button.innerText = "静止"
+					  })
+		        .catch(e => {
+							console.error("カメラの取得に失敗しました : ", e);
+						});
+		}
+		
+		//カメラを無効
+		function disableCamera() {
+			if (video.srcObject) {
+				video.srcObject.getTracks().forEach(track => track.stop());
+				button.innerText = "ｶﾒﾗ起動";
+				video.srcObject = null;
+			}
+		}
+		
+		
+		//写真の初期描画
+		function initPhoto() {
+				canvas.width = video.clientWidth;
+		    canvas.height = video.clientHeight;
+		    const context = canvas.getContext("2d");
+				//context.fillStyle = "#AAA";
+		    context.fillRect(0, 0, canvas.width, canvas.height);
+		    document.querySelector("#photo").src = canvas.toDataURL("image/png");
+		}
+
+		//写真の撮影描画
+		
+		function getPhoto() {
+			  let drawSize = calcDrawSize();
+		    canvas.width = drawSize.width;
+		    canvas.height = drawSize.height;
+		    const context = canvas.getContext("2d");
+		    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+		    document.querySelector("#photo").src = canvas.toDataURL("image/png");
+		}
+
+		/**
+		 * 描画サイズの計算
+		 * 縦横比が撮影(video)が大きい時は撮影の縦基準、それ以外は撮影の横基準で計算
+		 */
+		function calcDrawSize() {
+		    let videoRatio = video.videoHeight / video.videoWidth;
+		    let viewRatio = video.clientHeight / video.clientWidth;
+		    return videoRatio > viewRatio ?
+		        { height: video.clientHeight, width: video.clientHeight / videoRatio }
+		        : { height: video.clientWidth * videoRatio, width: video.clientWidth }
+		}
+			
+		
+				
+	</script>
 </body>
 </html>
