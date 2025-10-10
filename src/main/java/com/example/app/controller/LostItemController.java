@@ -1,5 +1,9 @@
 package com.example.app.controller;
 
+import java.io.File;
+import java.util.Arrays;
+import java.util.List;
+
 import jakarta.validation.Valid;
 
 import org.springframework.stereotype.Controller;
@@ -27,6 +31,8 @@ public class LostItemController {
 	private final AreaService areaService;
 	private final StrageService strageService;
 	
+	private static final String UPLOAD_DIRECTORY = "C:/Users/moand/gallery";
+	
 	@GetMapping("/user/list")
 	public String all(Model model) {
 		model.addAttribute("lostItems", service.getLostItemList());
@@ -40,6 +46,15 @@ public class LostItemController {
 					Model model) {
 				model.addAttribute("lostitem",service.getLostItemById(id));
 				System.out.println("findById成功");
+				// file check
+				String fileName;
+				fileName = "photo_" + id.toString() + ".png";
+//				System.out.println("fileName : " + fileName);
+//				System.out.println(isPhoto(fileName));
+				if (isPhoto(fileName)) {
+					fileName = "";
+				}
+				model.addAttribute("fname", fileName);
 				return "/user/show-lostitem";
 	}
 	
@@ -53,7 +68,8 @@ public class LostItemController {
 			return "user/save-lostitem";
 			
 	}
-	
+
+	// 追加画面で保存ボタンが押された時
 	@PostMapping("/user/add")
 	public String add(
 					@Valid LostItem lostItem,
@@ -73,12 +89,33 @@ public class LostItemController {
 				service.addLostItem(lostItem);
 				System.out.println("addLostItem成功");
 				redirectAttributes.addFlashAttribute("message", "忘れ物を新規登録しました。");
+				// 画像が取り込まれている時は、画像を保存する
+				
 				
 				return "redirect:/user/list";
 				
 				
 	}
 	
-	
+	// 画像があるかないか
+	public Boolean isPhoto (String imgName) {
+		// アップロードされているファイルのリストの取得
+		File uploadsDirectory = new File(UPLOAD_DIRECTORY);
+		File[] fileList = uploadsDirectory.listFiles();
+		
+		List <String> fileName = Arrays.stream(fileList)
+						.map(file -> file.getName()).toList();
+		
+		// foreach
+		for (String item : fileName) {
+			
+			System.out.println("item : " + item + ",imgName :" + imgName);
+			if (item == imgName) {
+				System.out.println("true!");
+				return true;
+			}
+		}
+		return false;
+	}
 
 }

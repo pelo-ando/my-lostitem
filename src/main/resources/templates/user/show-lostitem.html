@@ -12,7 +12,11 @@
 	      <table class="table table-bordered">
 	        <tbody>
 						<tr>
-							<td>画像を入れる予定</td>
+							<td>
+							<div style="width:320px; height:240px;">
+									<img th:src="@{/gallery/{img}(img=${fname})}" alt="写真はありません。" width=240px height=200px>
+							</div>
+							</td>
 						</tr>
 	          <tr>
 	            <th>拾得日</th>
