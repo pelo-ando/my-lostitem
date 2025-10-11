@@ -1,6 +1,6 @@
 package com.example.app.domain;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
@@ -15,6 +15,6 @@ public class ItemType {
 	@Max(20)
 	private String name;
 	private int regiPersonId;
-	private LocalDate registerAt;
+	private LocalDateTime registerAt;
 	
 }

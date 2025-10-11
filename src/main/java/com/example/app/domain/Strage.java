@@ -1,6 +1,6 @@
 package com.example.app.domain;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import lombok.Data;
 
@@ -9,6 +9,6 @@ public class Strage {
 
 	private int id;
 	private String name;
-	private LocalDate registerAt;
-	private LocalDate updateAt;
+	private LocalDateTime registerAt;
+	private LocalDateTime updateAt;
 }

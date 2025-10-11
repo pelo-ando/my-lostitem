@@ -1,6 +1,6 @@
 package com.example.app.domain;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import lombok.Data;
 
@@ -10,6 +10,6 @@ public class Area {
 	private int id;
 	private String name;
 	private int regiPersonId;
-	private LocalDate registerAt;
+	private LocalDateTime registerAt;
 	
 }

@@ -12,11 +12,11 @@
 		border: 1px solid#aaa;
 		width: 320px;
 		height: 240px;
-		z-index: 2;
+		z-index: 1;
 	}
 	#photo {
 		position:absolute;
-		z-index: 1;
+		z-index: 2;
 	}
 </style>
 <head th:replace="~{parts/common :: html_head()}"></head>
@@ -31,13 +31,13 @@
 
         <form class="form" action="" method="post" th:object="${lostItem}">
           <div class="mb-3">
-              <label>拾得日：<input type="date" th:field="*{findDate}"></label>
+              <label>拾得日：<input type="date" th:value="${#temporals.format(findDate, 'yyyy年MM月dd日(E)')}" th:field="*{findDate}"></label>
 <!--              <div class="error-message mt-2" th:errors="*{findDate}"></div>-->
           </div>
 					
           <p class="mb-4">拾得場所：
               <select th:field="*{areaId}">
-                  <option th:each="area : ${areaList}" th:value="${area.id}">[[${area.name}]]</option>
+                  <option th:each="area : ${areaList}" th:value="${area.id}" th:text="${area.name}"></option>
               </select>
           </p>
 <!--              <div class="error-message mt-2" th:errors="*{area}"></div>-->
@@ -49,14 +49,14 @@
 					
           <p class="mb-4">忘れ物分類：
               <select th:field="*{TypeId}">
-                  <option th:each="type : ${itemTypeList}" th:value="${type.id}">[[${type.name}]]</option>
+                  <option th:each="type : ${itemTypeList}" th:value="${type.id}" th:text="${type.name}"></option>
               </select>
           </p>
 					
 <!--      ここに写真ね"！-->
 					<div class="camera">
 						<video id="video"></video>
-						<img id="photo">
+						<img id="none" th:src="@{/gallery/{img}(img=${fname})}" alt="写真はありません。" width=240px height=200px>
 					</div>					
 						<button id="camera-photo" type="button">ｶﾒﾗ起動</button>
 
@@ -88,14 +88,30 @@
 		let isCameraRunning = false;
 		
 		//initVideoCamera();
-		initPhoto();
+		//initPhoto();
 		// cameraの起動・静止を押したとき
 		button.addEventListener('click', () => {
 			if (isCameraRunning) {
+				try {
+					var obj = document.getElementById("none");
+					obj.id = "photo";
+				} catch(e) {
+					console.log("nonn がないね")
+				} finally {
+					initPhoto();
+				}	
 				getPhoto();
 				disableCamera();
+				if (video.style.zIndex = 3) {
+					video.style.zIndex = 1;
+				}
+				
 			} else {
 				enableCamera();
+				if (video.style.zIndex = 1) {
+					video.style.zIndex = 3;
+				}
+				
 				console.log("cameraStart");
 			}
 			isCameraRunning = !isCameraRunning;
@@ -111,13 +127,14 @@
 		            video.srcObject = stream;
 		            video.play();
 								button.disabled = false;
-								button.innerText = "静止"
-					  })
+								button.innerText = "静止";
+								
+						 })
 		        .catch(e => {
 							console.error("カメラの取得に失敗しました : ", e);
 						});
 		}
-		
+	
 		//カメラを無効
 		function disableCamera() {
 			if (video.srcObject) {
@@ -133,7 +150,6 @@
 				canvas.width = video.clientWidth;
 		    canvas.height = video.clientHeight;
 		    const context = canvas.getContext("2d");
-				//context.fillStyle = "#AAA";
 		    context.fillRect(0, 0, canvas.width, canvas.height);
 		    document.querySelector("#photo").src = canvas.toDataURL("image/png");
 		}

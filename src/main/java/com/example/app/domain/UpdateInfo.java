@@ -1,6 +1,6 @@
 package com.example.app.domain;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
@@ -16,6 +16,6 @@ public class UpdateInfo {
 	@Max(100)
 	private String updateMemo;
 	private int regiPersonId;
-	private LocalDate updateAt;
+	private LocalDateTime updateAt;
 	
 }
