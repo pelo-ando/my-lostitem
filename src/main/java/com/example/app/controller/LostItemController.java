@@ -48,7 +48,7 @@ public class LostItemController {
 				System.out.println("findById成功");
 				// file check
 				String fileName;
-				fileName = "photo_" + id.toString() + ".png";
+				fileName = "animal" + id.toString() + ".jpg";
 //				System.out.println("fileName : " + fileName);
 //				System.out.println(isPhoto(fileName));
 				if (isPhoto(fileName)) {
@@ -93,11 +93,30 @@ public class LostItemController {
 				
 				
 				return "redirect:/user/list";
-				
-				
 	}
 	
-	// 画像があるかないか
+	@GetMapping("/user/edit/{id}")
+	public String edit(
+					@PathVariable Integer id,
+					Model model) {
+				model.addAttribute("lostItem",service.getLostItemById(id));
+				model.addAttribute("itemTypeList", itemTypeService.getItemTypeList());
+				model.addAttribute("areaList", areaService.getAreaList());
+				model.addAttribute("strageList", strageService.getStrageList());
+				model.addAttribute("heading", "忘れ物の編集");
+				// file check
+				String fileName;
+				fileName = "animal" + id.toString() + ".jpg";
+//				System.out.println("fileName : " + fileName);
+//				System.out.println(isPhoto(fileName));
+//				if (isPhoto(fileName)) {
+//					fileName = "";
+//				}
+				model.addAttribute("fname", fileName);
+				return "/user/save-lostitem";
+	}
+	
+	// 画像があるかないか まだ機能していない！
 	public Boolean isPhoto (String imgName) {
 		// アップロードされているファイルのリストの取得
 		File uploadsDirectory = new File(UPLOAD_DIRECTORY);
