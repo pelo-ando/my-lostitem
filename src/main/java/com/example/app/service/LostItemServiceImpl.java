@@ -27,6 +27,19 @@ public class LostItemServiceImpl implements LostItemService {
 		return lostItemMapper.findById(id);
 	}
 	
+	// ページ分割機能用
+	@Override
+	public List<LostItem> getLostItemsByPage(int page, int numPerPage) {
+		int offset = numPerPage * (page - 1);
+		return lostItemMapper.findLimited(offset, numPerPage);
+	}
+	
+	@Override
+	public int getTotalPages(int numPerPage) {
+		double totalNum = (double) lostItemMapper.count();
+		return (int) Math.ceil(totalNum / numPerPage);
+	}
+	
 	@Override
 	public void addLostItem(LostItem lostItem) {
 		lostItemMapper.insert(lostItem);

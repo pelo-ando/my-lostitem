@@ -2,7 +2,7 @@
 <html lang="ja" xmlns:th= "http://www.thymeleaf.org">
 <head th:replace="~{parts/common :: html_head()}"></head>
 <body>
-  <header th:replace="~{parts/common :: header()}"></header>
+  <nav th:replace="~{parts/common :: navbar}"></nav>
   
   <div class="container">
 	  <h1 class="my-4 h3">[[${lostItem.content}]]</h1>
@@ -14,7 +14,7 @@
 						<tr>
 							<td>
 							<div style="width:240px; height:200px;">
-									<img th:src="@{${imgPath}}" alt="写真はありません。" width=240px height=200px>
+									<img th:src="@{/gallery/{img}(img=${name})}" alt="写真はありません。" width=240px height=200px>
 							</div>
 							</td>
 						</tr>

@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 import org.springframework.stereotype.Controller;
@@ -12,6 +13,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.app.domain.LostItem;
@@ -26,17 +28,28 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class LostItemController {
 	
+	// １ページ当たりの備品表示件数
+	private final int NUM_PER_PAGE = 5;
+	
 	private final LostItemService service;
 	private final ItemTypeService itemTypeService;
 	private final AreaService areaService;
 	private final StrageService strageService;
+	private final HttpSession session;
 	
 	private static final String UPLOAD_DIRECTORY = "C:/Users/moand/gallery";
 	
 	@GetMapping("/user/list")
-	public String all(Model model) {
-		model.addAttribute("lostItems", service.getLostItemList());
-		System.out.println("select成功 " );
+	public String showLostItemList(
+					@RequestParam(name = "page", defaultValue = "1") Integer page,
+					Model model) throws Exception{
+			model.addAttribute("lostItems", service.getLostItemsByPage(page, NUM_PER_PAGE));
+//			model.addAttribute("lostItems", service.getLostItemList());
+			model.addAttribute("currentPage", page);
+			// 他のページから戻る際に利用
+			session.setAttribute("page", page);
+			model.addAttribute("totalPages", service.getTotalPages(NUM_PER_PAGE));
+		System.out.println("getLostItemByPage成功 " );
 		return "/user/lostitem";
 	}
 	
@@ -48,7 +61,7 @@ public class LostItemController {
 				System.out.println("findById成功");
 				// file check
 				String fileName;
-				fileName = "/gallery/" + "photo" + Integer.toString(id) + ".jpg";
+				fileName = "animal" + Integer.toString(id) + ".jpg";
 //				System.out.println("fileName : " + fileName);
 //				System.out.println(isPhoto(fileName));
 //				if (!isPhoto(fileName)) {
@@ -108,7 +121,7 @@ public class LostItemController {
 				model.addAttribute("strageList", strageService.getStrageList());
 				model.addAttribute("heading", "忘れ物の編集");
 				// file check
-				String fileName = "/gallery/" + "photo" + id.toString() + ".jpg";
+				String fileName = "animal" + id.toString() + ".jpg";
 //				System.out.println("fileName : " + fileName);
 //				System.out.println(isPhoto(fileName));
 //				if (!isPhoto(fileName)) {

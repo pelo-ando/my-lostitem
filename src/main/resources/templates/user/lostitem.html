@@ -2,7 +2,7 @@
 <html lang="ja" xmlns:th= "http://www.thymeleaf.org">
 <head th:replace="~{parts/common :: html_head()}"></head>
 <body>
-  <header th:replace="~{parts/common :: header()}"></header>
+  <nav th:replace="~{parts/common :: navbar}"></nav>
 
   <div class="container">
     <h1 class="my-4 h3">忘れ物登録リスト</h1>
@@ -53,9 +53,10 @@
 	        </tr>
           </tbody>
         </table>
-
-<!--        <div th:replace="~{widget/pagination :: pagination(${totalPages}, ${currentPage}, 'admin/material/list')}"></div>-->
+				
+        <div th:replace="~{parts/pagination :: pagination(${totalPages}, ${currentPage}, 'user/list')}"></div>
       </div><!-- /.col- -->
+			
     </div><!-- /.row -->
   </div><!-- /.container -->
   

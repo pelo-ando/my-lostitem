@@ -8,7 +8,13 @@ public interface LostItemService {
 
 	List<LostItem> getLostItemList() ;		
 	LostItem getLostItemById(Integer id);
+	
+	// ページ分割機能用
+	List<LostItem> getLostItemsByPage(int page, int numPerPage);
+	int getTotalPages(int numPerPage);
+	
 	void addLostItem(LostItem lostItem) ;
+	
 	// pagination導入で書き直し
 //	List<LostItem> getLostItemByDate(Date from, Date to) throws Exception;
 //	void deleteLostItem(Integer id) throws Exception;

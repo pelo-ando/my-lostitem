@@ -48,6 +48,16 @@
 			WHERE lostitems.id = #{id}
 	</select>
 	
+	<select id="findLimited" resultMap="lostitemMap">
+			<include refid="selectAndJoin" />
+			ORDER BY lostitems.find_date DESC
+			LIMIT #{offset}, #{limit} 
+	</select>
+	
+	<select id="count" resultType="long">
+			SELECT COUNT(*) FROM lostitems
+	</select>
+	
 	<insert id="insert" parameterType="LostItem">
 			INSERT 	INTO lostitems 
 									(find_date, content, find_person_name,
