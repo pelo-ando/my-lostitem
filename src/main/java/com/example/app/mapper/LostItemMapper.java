@@ -9,9 +9,9 @@ import com.example.app.domain.LostItem;
 @Mapper
 public interface LostItemMapper {
 
-	List<LostItem> findAll(); 
-	LostItem findById(Integer id);
-	void insert(LostItem lostItem);
+	List<LostItem> findAll() ; 
+	LostItem findById(Integer id) ;
+	void insert(LostItem lostItem) ;
 //	List<LostItem> findByDate(Date from, Date to) throws Exception;
 //	void update(LostItem lostItem) throws Exception;
 //	void delete(Integer id) throws Exception;

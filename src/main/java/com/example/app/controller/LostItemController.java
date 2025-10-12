@@ -44,17 +44,17 @@ public class LostItemController {
 	public String show(
 					@PathVariable Integer id,
 					Model model) {
-				model.addAttribute("lostitem",service.getLostItemById(id));
+				model.addAttribute("lostItem",service.getLostItemById(id));
 				System.out.println("findById成功");
 				// file check
 				String fileName;
-				fileName = "animal" + id.toString() + ".jpg";
+				fileName = "/gallery/" + "photo" + Integer.toString(id) + ".jpg";
 //				System.out.println("fileName : " + fileName);
 //				System.out.println(isPhoto(fileName));
-				if (isPhoto(fileName)) {
-					fileName = "";
-				}
-				model.addAttribute("fname", fileName);
+//				if (!isPhoto(fileName)) {
+//					fileName = "";
+//				}
+				model.addAttribute("imgPath", fileName);
 				return "/user/show-lostitem";
 	}
 	
@@ -73,6 +73,7 @@ public class LostItemController {
 	@PostMapping("/user/add")
 	public String add(
 					@Valid LostItem lostItem,
+					@Valid String imgPath ,
 					Errors errors,
 					Model model,
 					RedirectAttributes redirectAttributes) throws Exception {
@@ -89,8 +90,10 @@ public class LostItemController {
 				service.addLostItem(lostItem);
 				System.out.println("addLostItem成功");
 				redirectAttributes.addFlashAttribute("message", "忘れ物を新規登録しました。");
+				//
 				// 画像が取り込まれている時は、画像を保存する
-				
+				//
+				System.out.println("「imgPath」: " + imgPath);
 				
 				return "redirect:/user/list";
 	}
@@ -105,36 +108,38 @@ public class LostItemController {
 				model.addAttribute("strageList", strageService.getStrageList());
 				model.addAttribute("heading", "忘れ物の編集");
 				// file check
-				String fileName;
-				fileName = "animal" + id.toString() + ".jpg";
+				String fileName = "/gallery/" + "photo" + id.toString() + ".jpg";
 //				System.out.println("fileName : " + fileName);
 //				System.out.println(isPhoto(fileName));
-//				if (isPhoto(fileName)) {
+//				if (!isPhoto(fileName)) {
 //					fileName = "";
 //				}
-				model.addAttribute("fname", fileName);
+				model.addAttribute("imgPath", fileName);
 				return "/user/save-lostitem";
 	}
 	
 	// 画像があるかないか まだ機能していない！
-	public Boolean isPhoto (String imgName) {
+	public boolean isPhoto (String imgName) {
 		// アップロードされているファイルのリストの取得
+		boolean result = false;
 		File uploadsDirectory = new File(UPLOAD_DIRECTORY);
 		File[] fileList = uploadsDirectory.listFiles();
 		
-		List <String> fileName = Arrays.stream(fileList)
+		List <String> fileNames = Arrays.stream(fileList)
 						.map(file -> file.getName()).toList();
 		
 		// foreach
-		for (String item : fileName) {
+		for (String item : fileNames) {
 			
 			System.out.println("item : " + item + ",imgName :" + imgName);
-			if (item == imgName) {
-				System.out.println("true!");
-				return true;
+			if (item != imgName) {
+				System.out.println("false!");
+			} else {
+				result = true;
+				break;
 			}
 		}
-		return false;
+		return result;
 	}
 
 }

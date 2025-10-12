@@ -5,7 +5,7 @@
   <header th:replace="~{parts/common :: header()}"></header>
   
   <div class="container">
-	  <h1 class="my-4 h3">[[${lostitem.content}]]</h1>
+	  <h1 class="my-4 h3">[[${lostItem.content}]]</h1>
 	  
 	  <div class="row">
 	    <div class="col-md-12">
@@ -14,31 +14,31 @@
 						<tr>
 							<td>
 							<div style="width:240px; height:200px;">
-									<img th:src="@{/gallery/{img}(img=${fname})}" alt="写真はありません。" width=240px height=200px>
+									<img th:src="@{${imgPath}}" alt="写真はありません。" width=240px height=200px>
 							</div>
 							</td>
 						</tr>
 	          <tr>
 	            <th>拾得日</th>
-	            <td>[[${#temporals.format(lostitem.findDate, 'yyyy年MM月dd日(E)')}]]</td>
+	            <td>[[${#temporals.format(lostItem.findDate, 'yyyy年MM月dd日(E)')}]]</td>
 	          </tr>
 	          <tr>
 	            <th>拾得場所</th>
-	            <td>[[${lostitem.areaName}]]</td>
+	            <td>[[${lostItem.areaName}]]</td>
 	          </tr>
 	          <tr>
 	            <th>拾得者</th>
-	            <td>[[${lostitem.findPersonName}]]</td>
+	            <td>[[${lostItem.findPersonName}]]</td>
 	          </tr>
 	          <tr>
 	            <th>状態</th>
-	            <td>[[${lostitem.status}]]</td>
+	            <td>[[${lostItem.status}]]</td>
 	          </tr>
 	          <tr>
 	            <th>保管場所</th>
-	            <td>[[${lostitem.strageName}]]</td>
+	            <td>[[${lostItem.strageName}]]</td>
 	          </tr>
-	            <td>[[${#temporals.format(lostitem.updateAt, 'yyyy年MM月dd日(E) HH時mm分ss秒')}]]</td>
+	            <td>[[${#temporals.format(lostItem.updateAt, 'yyyy年MM月dd日(E) HH時mm分ss秒')}]]</td>
 	          </tr>
 	         </tbody>
 	      </table>

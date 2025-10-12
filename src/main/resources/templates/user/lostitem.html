@@ -11,7 +11,12 @@
       <div class="col-md-12">
          <p>
            <a th:href="@{/user/add}" class="btn btn-primary">忘れ物登録の追加</a>
-           <a th:href="@{/user/list}" class="btn btn-light">今はなし</a>
+           <th:block th:if="${session.loginStatus.authority == '管理者'}">
+						 <a th:href="@{/user/list}" class="btn btn-light" >ユーザー編集</a>
+						 <a th:href="@{/user/list}" class="btn btn-light" >拾得場所追加</a>
+						 <a th:href="@{/user/list}" class="btn btn-light" >忘れ物分類追加</a>
+						 <a th:href="@{/user/list}" class="btn btn-light" >保管場所追加</a>
+					 </th:block>
          </p>
         
 <!--        <div class="alert alert-success" th:if="${message}">-->
@@ -54,6 +59,6 @@
     </div><!-- /.row -->
   </div><!-- /.container -->
   
-<!--  <th:block th:replace="~{admin/parts/common :: javascripts()}"></th:block>-->
+  <th:block th:replace="~{parts/common :: javascripts()}"></th:block>
 </body>
 </html>

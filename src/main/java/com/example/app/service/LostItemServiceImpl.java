@@ -14,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 public class LostItemServiceImpl implements LostItemService {
 
 	private final LostItemMapper lostItemMapper;
+//	@Autowired
+//	LostItemMapper lostItemMapper;
 	
 	@Override
 	public List<LostItem> getLostItemList() {

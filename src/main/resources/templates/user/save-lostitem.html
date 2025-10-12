@@ -32,19 +32,19 @@
         <form class="form" action="" method="post" th:object="${lostItem}">
           <div class="mb-3">
               <label>拾得日：<input type="date" th:value="${#temporals.format(findDate, 'yyyy年MM月dd日(E)')}" th:field="*{findDate}"></label>
-<!--              <div class="error-message mt-2" th:errors="*{findDate}"></div>-->
+              <div class="error-message mt-2" th:errors="*{findDate}"></div>
           </div>
 					
           <p class="mb-4">拾得場所：
               <select th:field="*{areaId}">
                   <option th:each="area : ${areaList}" th:value="${area.id}" th:text="${area.name}"></option>
-              </select>
+					    </select>
           </p>
-<!--              <div class="error-message mt-2" th:errors="*{area}"></div>-->
+<!--		              <div class="error-message mt-2" th:errors="${area.name}"></div>-->
 					
           <div class="mb-3">
               <label>内容：<input type="text" th:field="*{content}"></label>
-<!--              <div class="error-message mt-2" th:errors="*{content}"></div>-->
+              <div class="error-message mt-2" th:errors="*{content}"></div>
           </div>
 					
           <p class="mb-4">忘れ物分類：
@@ -56,13 +56,13 @@
 <!--      ここに写真ね"！-->
 					<div class="camera">
 						<video id="video"></video>
-						<img id="none" th:src="@{/gallery/{img}(img=${fname})}" alt="写真はありません。" width=240px height=200px>
+						<img id="photo" th:src="@{${imgPath}}" alt="写真はありません。" width=240px height=200px>
 					</div>					
 						<button id="camera-photo" type="button">ｶﾒﾗ起動</button>
 
           <div class="mb-3">
               <label>拾得者名：<input type="text" size="50" th:field="*{findPersonName}"></label>
-<!--              <div class="error-message mt-2" th:errors="*{findPersonName}"></div>-->
+              <div class="error-message mt-2" th:errors="*{findPersonName}"></div>
           </div>
       
           <p class="mb-4">保管場所：

@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -14,16 +16,16 @@ public class LostItem {
 
 	
 	private int id;
-	
+//	@NotBlank
+	@PastOrPresent
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate findDate;
 	@NotNull
-//	@Size(Max = 30)
+	@Size(max = 30)
 	private String content;
 	@NotNull
-//	@Size(Max =10)
+	@Size(max =10)
 	private String findPersonName;
-	@NotNull
 	private String status;
 	private String memo;
 	private LocalDateTime registerAt;

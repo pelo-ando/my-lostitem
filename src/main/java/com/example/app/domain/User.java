@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import lombok.Data;
 
@@ -12,10 +13,10 @@ public class User {
 	
 	private Integer id;
 	@NotNull
-	@Max(30)
+	@Size(max = 30)
 	private String loginId;
 	@NotNull
-	@Max(60)
+	@Size(max = 60)
 	private String loginPass;
 	@NotNull
 	@Max(30)
