@@ -3,15 +3,15 @@
 <style>
 	.camera {
 		position:relative;
-		width:350px;
-		height:250px;
+		width:240px;
+		height:220px;
 	}
 	
 	#video {
 		position:absolute;
 		border: 1px solid#aaa;
-		width: 320px;
-		height: 240px;
+		width: 240px;
+		height: 200px;
 		z-index: 1;
 	}
 	#photo {
@@ -56,7 +56,7 @@
 <!--      ここに写真ね"！-->
 					<div class="camera">
 						<video id="video"></video>
-						<img id="photo" th:src="@{/gallery/{img}(img=${imgPath})}" alt="写真はありません。" width=240px height=200px>
+						<img id="none" th:src="@{/gallery/{img}(img=${fname})}" alt="写真はありません。" width=240px height=200px>
 					</div>					
 						<button id="camera-photo" type="button">ｶﾒﾗ起動</button>
 
@@ -72,7 +72,7 @@
           </p>
       
           <input class="btn btn-primary" type="submit" value="保存する">
-          <a th:href="@{/user/list}" class="btn btn-secondary">キャンセル</a>
+          <a th:href="@{/user/list(page=${session.page})}" class="btn btn-secondary">キャンセル</a>
 <!--          <a th:href="@{/itemlist/list(page=${session.page})}" class="btn btn-secondary">キャンセル</a>-->
         </form>
       </div><!-- /.col- -->

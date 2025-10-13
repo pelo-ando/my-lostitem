@@ -2,6 +2,7 @@ package com.example.app.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.app.domain.LostItem;
@@ -13,9 +14,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class LostItemServiceImpl implements LostItemService {
 
-	private final LostItemMapper lostItemMapper;
-//	@Autowired
-//	LostItemMapper lostItemMapper;
+//	private final LostItemMapper lostItemMapper;
+	@Autowired
+	LostItemMapper lostItemMapper;
 	
 	@Override
 	public List<LostItem> getLostItemList() {

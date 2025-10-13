@@ -56,7 +56,7 @@ public class LostItemController {
 	@GetMapping("/user/show/{id}")
 	public String show(
 					@PathVariable Integer id,
-					Model model) {
+					Model model) throws Exception{
 				model.addAttribute("lostItem",service.getLostItemById(id));
 				System.out.println("findById成功");
 				// file check
@@ -64,15 +64,15 @@ public class LostItemController {
 				fileName = "animal" + Integer.toString(id) + ".jpg";
 //				System.out.println("fileName : " + fileName);
 //				System.out.println(isPhoto(fileName));
-//				if (!isPhoto(fileName)) {
-//					fileName = "";
-//				}
-				model.addAttribute("imgPath", fileName);
+				if (isPhoto(fileName)) {
+					fileName = "";
+				}
+				model.addAttribute("fname", fileName);
 				return "/user/show-lostitem";
 	}
 	
 	@GetMapping("/user/add")
-	public String add(Model model) {
+	public String add(Model model) throws Exception{
 			model.addAttribute("lostItem", new LostItem());
 			model.addAttribute("itemTypeList", itemTypeService.getItemTypeList());
 			model.addAttribute("areaList", areaService.getAreaList());
@@ -86,7 +86,7 @@ public class LostItemController {
 	@PostMapping("/user/add")
 	public String add(
 					@Valid LostItem lostItem,
-					@Valid String imgPath ,
+					@Valid String name ,
 					Errors errors,
 					Model model,
 					RedirectAttributes redirectAttributes) throws Exception {
@@ -106,15 +106,16 @@ public class LostItemController {
 				//
 				// 画像が取り込まれている時は、画像を保存する
 				//
-				System.out.println("「imgPath」: " + imgPath);
-				
-				return "redirect:/user/list";
+				System.out.println("「imgPath」: " + name);
+				// 追加後に戻るページ
+				int totalPages = service.getTotalPages(NUM_PER_PAGE);
+				return "redirect:/user/list?page=" + totalPages;
 	}
 	
 	@GetMapping("/user/edit/{id}")
 	public String edit(
 					@PathVariable Integer id,
-					Model model) {
+					Model model) throws Exception{
 				model.addAttribute("lostItem",service.getLostItemById(id));
 				model.addAttribute("itemTypeList", itemTypeService.getItemTypeList());
 				model.addAttribute("areaList", areaService.getAreaList());
@@ -124,10 +125,10 @@ public class LostItemController {
 				String fileName = "animal" + id.toString() + ".jpg";
 //				System.out.println("fileName : " + fileName);
 //				System.out.println(isPhoto(fileName));
-//				if (!isPhoto(fileName)) {
-//					fileName = "";
-//				}
-				model.addAttribute("imgPath", fileName);
+				if (isPhoto(fileName)) {
+					fileName = "";
+				}
+				model.addAttribute("fname", fileName);
 				return "/user/save-lostitem";
 	}
 	
@@ -145,11 +146,11 @@ public class LostItemController {
 		for (String item : fileNames) {
 			
 			System.out.println("item : " + item + ",imgName :" + imgName);
-			if (item != imgName) {
-				System.out.println("false!");
-			} else {
+			if (item == imgName) {
 				result = true;
 				break;
+			} else {
+				System.out.println("false!");
 			}
 		}
 		return result;

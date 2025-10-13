@@ -1,8 +1,7 @@
 package com.example.app.domain;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
@@ -19,12 +18,13 @@ public class User {
 	@Size(max = 60)
 	private String loginPass;
 	@NotNull
-	@Max(30)
+	@Size(max = 30)
 	private String name;
-	
+	@NotNull
+	@Size(max = 10)
 	private String userType;
 	
-	private LocalDate registerAt;
-	private LocalDate updateAt;
+	private LocalDateTime registerAt;
+	private LocalDateTime updateAt;
 	
 }
