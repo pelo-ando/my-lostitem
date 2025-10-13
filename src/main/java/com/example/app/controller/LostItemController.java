@@ -17,10 +17,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.app.domain.LostItem;
+import com.example.app.domain.UpdateInfo;
 import com.example.app.service.AreaService;
 import com.example.app.service.ItemTypeService;
 import com.example.app.service.LostItemService;
 import com.example.app.service.StrageService;
+import com.example.app.service.UpdateInfoService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -35,6 +37,7 @@ public class LostItemController {
 	private final ItemTypeService itemTypeService;
 	private final AreaService areaService;
 	private final StrageService strageService;
+	private final UpdateInfoService updateInfoService;
 	private final HttpSession session;
 	
 	private static final String UPLOAD_DIRECTORY = "C:/Users/moand/gallery";
@@ -58,6 +61,7 @@ public class LostItemController {
 					@PathVariable Integer id,
 					Model model) throws Exception{
 				model.addAttribute("lostItem",service.getLostItemById(id));
+				model.addAttribute("updateInfo",updateInfoService.getUpdateInfoById(id));
 				System.out.println("findById成功");
 				// file check
 				String fileName;
@@ -78,6 +82,8 @@ public class LostItemController {
 			model.addAttribute("areaList", areaService.getAreaList());
 			model.addAttribute("strageList", strageService.getStrageList());
 			model.addAttribute("heading", "忘れ物の登録");
+			model.addAttribute("updateInfo", new UpdateInfo());
+			
 			return "user/save-lostitem";
 			
 	}
@@ -86,7 +92,8 @@ public class LostItemController {
 	@PostMapping("/user/add")
 	public String add(
 					@Valid LostItem lostItem,
-					@Valid String name ,
+					@Valid String fname ,
+					
 					Errors errors,
 					Model model,
 					RedirectAttributes redirectAttributes) throws Exception {
@@ -106,7 +113,7 @@ public class LostItemController {
 				//
 				// 画像が取り込まれている時は、画像を保存する
 				//
-				System.out.println("「imgPath」: " + name);
+				System.out.println("「imgPath」: " + fname);
 				// 追加後に戻るページ
 				int totalPages = service.getTotalPages(NUM_PER_PAGE);
 				return "redirect:/user/list?page=" + totalPages;
@@ -120,6 +127,7 @@ public class LostItemController {
 				model.addAttribute("itemTypeList", itemTypeService.getItemTypeList());
 				model.addAttribute("areaList", areaService.getAreaList());
 				model.addAttribute("strageList", strageService.getStrageList());
+				model.addAttribute("updateInfo" , updateInfoService.getUpdateInfoById(id));
 				model.addAttribute("heading", "忘れ物の編集");
 				// file check
 				String fileName = "animal" + id.toString() + ".jpg";
@@ -132,28 +140,63 @@ public class LostItemController {
 				return "/user/save-lostitem";
 	}
 	
-	// 画像があるかないか まだ機能していない！
-	public boolean isPhoto (String imgName) {
-		// アップロードされているファイルのリストの取得
-		boolean result = false;
-		File uploadsDirectory = new File(UPLOAD_DIRECTORY);
-		File[] fileList = uploadsDirectory.listFiles();
-		
-		List <String> fileNames = Arrays.stream(fileList)
-						.map(file -> file.getName()).toList();
-		
-		// foreach
-		for (String item : fileNames) {
-			
-			System.out.println("item : " + item + ",imgName :" + imgName);
-			if (item == imgName) {
-				result = true;
-				break;
-			} else {
-				System.out.println("false!");
-			}
-		}
-		return result;
-	}
 
+	@PostMapping("/user/edit/{id}")
+	public String edit_addUpdate(
+					@Valid LostItem lostItem,
+					@Valid UpdateInfo updateinfo,
+					@Valid String fname ,
+					Errors errors,
+					Model model,
+					RedirectAttributes redirectAttributes) throws Exception {
+				
+					// 
+		
+				if (errors.hasErrors()) {
+					model.addAttribute("itemTypeList", itemTypeService.getItemTypeList());
+					model.addAttribute("areaList", areaService.getAreaList());
+					model.addAttribute("strageList", strageService.getStrageList());
+					model.addAttribute("heading", "忘れ物の登録");
+					System.out.println(errors);
+					return "user/save-lostitem";
+				}
+				
+				service.addLostItem(lostItem);
+//				updateInfoService.add
+				System.out.println("addLostItem成功");
+				redirectAttributes.addFlashAttribute("message", "忘れ物を新規登録しました。");
+				//
+				// 画像が取り込まれている時は、画像を保存する
+				//
+				System.out.println("「imgPath」: " + fname);
+				// 追加後に戻るページ
+				int totalPages = service.getTotalPages(NUM_PER_PAGE);
+				return "redirect:/user/list?page=" + totalPages;
+	}
+	
+	
+
+		// 画像があるかないか まだ機能していない！
+		public boolean isPhoto (String imgName) {
+			// アップロードされているファイルのリストの取得
+			boolean result = false;
+			File uploadsDirectory = new File(UPLOAD_DIRECTORY);
+			File[] fileList = uploadsDirectory.listFiles();
+			
+			List <String> fileNames = Arrays.stream(fileList)
+					.map(file -> file.getName()).toList();
+			
+			// foreach
+			for (String item : fileNames) {
+				
+				System.out.println("item : " + item + ",imgName :" + imgName);
+				if (item == imgName) {
+					result = true;
+					break;
+				} else {
+					System.out.println("false!");
+				}
+			}
+			return result;
+		}
 }

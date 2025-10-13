@@ -70,7 +70,13 @@
                   <option th:each="strage : ${strageList}" th:value="${strage.id}">[[${strage.name}]]</option>
               </select>
           </p>
-      
+					<div>対応履歴
+						<ul th:object="${updateInfo}">
+							<th:block th:if="${updateInfo != null}">
+								<li th:each="info : ${updateInfo}">[[${info.memo}]]: [[${info.updateAt}]] by [[${info.modifyPersonName}]]</li>
+							</th:block>
+						</ul>
+      		</div>
           <input class="btn btn-primary" type="submit" value="保存する">
           <a th:href="@{/user/list(page=${session.page})}" class="btn btn-secondary">キャンセル</a>
 <!--          <a th:href="@{/itemlist/list(page=${session.page})}" class="btn btn-secondary">キャンセル</a>-->

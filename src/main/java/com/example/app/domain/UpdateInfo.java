@@ -11,11 +11,18 @@ import lombok.Data;
 public class UpdateInfo {
 
 	private int id;
-	@NotNull
-	private int contentId;
 	@Max(100)
-	private String updateMemo;
-	private int regiPersonId;
+	private String memo;
 	private LocalDateTime updateAt;
 	
+	// 忘れ物ID
+	@NotNull
+	private int contentId;
+	private String contentName;
+	
+	// UserID	
+	private int modifyPersonId;
+	private String modifyPersonName;
+
+
 }
