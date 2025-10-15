@@ -62,7 +62,7 @@ public class LostItemController {
 					Model model) throws Exception{
 				model.addAttribute("lostItem",service.getLostItemById(id));
 				model.addAttribute("updateInfo",updateInfoService.getUpdateInfoById(id));
-				System.out.println("findById成功");
+				System.out.println("show-findById成功");
 				// file check
 				String fileName;
 				fileName = "animal" + Integer.toString(id) + ".jpg";
@@ -143,6 +143,7 @@ public class LostItemController {
 
 	@PostMapping("/user/edit/{id}")
 	public String edit_addUpdate(
+					@PathVariable Integer id,
 					@Valid LostItem lostItem,
 					@Valid UpdateInfo updateinfo,
 					@Valid String fname ,
@@ -161,17 +162,17 @@ public class LostItemController {
 					return "user/save-lostitem";
 				}
 				
-				service.addLostItem(lostItem);
+				service.editLostItem(lostItem);
 //				updateInfoService.add
-				System.out.println("addLostItem成功");
-				redirectAttributes.addFlashAttribute("message", "忘れ物を新規登録しました。");
+				System.out.println("editLostItem成功");
+				redirectAttributes.addFlashAttribute("message", "忘れ物を編集しました。");
 				//
 				// 画像が取り込まれている時は、画像を保存する
 				//
 				System.out.println("「imgPath」: " + fname);
-				// 追加後に戻るページ
-				int totalPages = service.getTotalPages(NUM_PER_PAGE);
-				return "redirect:/user/list?page=" + totalPages;
+				// 編集後に戻るページ
+				int previousPage = (int) session.getAttribute("page");
+				return "redirect:/user/list?page=" + previousPage;
 	}
 	
 	

@@ -15,6 +15,8 @@ public interface LostItemService {
 	
 	void addLostItem(LostItem lostItem) ;
 	
+	void editLostItem(LostItem lostItem);
+	
 	// pagination導入で書き直し
 //	List<LostItem> getLostItemByDate(Date from, Date to) throws Exception;
 //	void deleteLostItem(Integer id) throws Exception;

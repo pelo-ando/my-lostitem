@@ -46,5 +46,10 @@ public class LostItemServiceImpl implements LostItemService {
 		lostItemMapper.insert(lostItem);
 	}
 	
+	@Override
+	public void editLostItem(LostItem lostItem) {
+		lostItemMapper.update(lostItem);
+	}
+	
 	
 }

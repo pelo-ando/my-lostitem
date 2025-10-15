@@ -42,7 +42,7 @@
 							<td>
 								<ul th:object="${updateInfo}">
 									<th:block th:if="${updateInfo != null}">
-										<li th:each="info : ${updateInfo}">[[${info.memo} : ]]: [[${info.updateAt}]] by [[${info.modifyPersonName}]]</li>
+										<li th:each="info : ${updateInfo}">[[${info.memo}]]: [[${info.updateAt}]] by [[${info.modifyPersonName}]]</li>
 									</th:block>
 								</ul>
 							</td>

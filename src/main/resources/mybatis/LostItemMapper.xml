@@ -50,7 +50,7 @@
 	
 	<select id="findLimited" resultMap="lostitemMap">
 			<include refid="selectAndJoin" />
-			ORDER BY lostitems.find_date DESC
+			ORDER BY lostitems.id DESC
 			LIMIT #{offset}, #{limit} 
 	</select>
 	
@@ -68,5 +68,19 @@
 											#{memo}, NOW(),
 											#{typeId}, #{areaId}, #{strageId})
 	</insert>
+
+	<update id="update" parameterType="LostItem">
+			UPDATE lostitems 
+			SET		find_date = #{findDate},
+						content = #{content},
+						find_person_name = #{findPersonName},
+						memo = #{memo},
+						register_at = NOW(),
+						type_id = #{typeId},
+						area_id = #{areaId},
+						strage_id = #{strageId}
+			WHERE lostitems.id = #{id} 
+	</update>
+	
 
 </mapper>
