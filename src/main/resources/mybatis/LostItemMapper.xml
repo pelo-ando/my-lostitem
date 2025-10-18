@@ -58,7 +58,8 @@
 			SELECT COUNT(*) FROM lostitems
 	</select>
 	
-	<insert id="insert" parameterType="LostItem">
+	<insert id="insert" parameterType="LostItem"
+			useGeneratedKeys="true" keyProperty="id">
 			INSERT 	INTO lostitems 
 									(find_date, content, find_person_name,
 									memo, register_at,

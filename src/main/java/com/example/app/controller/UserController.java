@@ -3,11 +3,11 @@ package com.example.app.controller;
 import java.time.LocalDateTime;
 
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.app.domain.User;
 import com.example.app.service.UserService;
+import com.example.app.validation.LoginGroup;
 
 import lombok.RequiredArgsConstructor;
 
@@ -55,7 +56,7 @@ public class UserController {
 
 	@PostMapping("/add")
 	public String add(
-			@Valid User user,
+			@Validated(LoginGroup.class) User user,
 			Errors errors,
 			Model model,
 			RedirectAttributes redirectAttributes) throws Exception {
@@ -91,7 +92,7 @@ public class UserController {
 	@PostMapping("/edit/{id}")
 	public String edit(
 			@PathVariable Integer id,
-			@Valid User user,
+			@Validated(LoginGroup.class) User user,
 			Errors errors,
 			Model model,
 			RedirectAttributes redirectAttributes) throws Exception {

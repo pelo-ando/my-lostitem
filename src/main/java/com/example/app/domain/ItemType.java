@@ -2,8 +2,10 @@ package com.example.app.domain;
 
 import java.time.LocalDateTime;
 
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
+import com.example.app.validation.ItemTypeGroup;
 
 import lombok.Data;
 
@@ -11,8 +13,8 @@ import lombok.Data;
 public class ItemType {
 
 	private int id;
-	@NotNull
-	@Max(20)
+	@NotBlank(groups = {ItemTypeGroup.class})
+	@Size(max=20, groups = {ItemTypeGroup.class})
 	private String name;
 	private int regiPersonId;
 	private LocalDateTime registerAt;

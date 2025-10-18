@@ -4,14 +4,14 @@
 	.camera {
 		position:relative;
 		width:240px;
-		height:200px;
+		height:180px;
 	}
 	
 	#video {
 		position:absolute;
 		border: 1px solid#aaa;
 		width: 240px;
-		height: 200px;
+		height: 180px;
 		z-index: 1;
 	}
 	#photo {
@@ -56,7 +56,7 @@
 <!--      ここに写真ね"！-->
 					<div class="camera">
 						<video id="video"></video>
-						<img id="none" th:src="@{/gallery/{img}(img=${fname})}" alt="写真はありません。" width=240px height=200px>
+						<img id="photo" th:src="${base64Data}" alt="写真はありません。" width=240px height=180px>
 					</div>					
 						<button id="camera-photo" type="button">ｶﾒﾗ起動</button>
 
@@ -88,6 +88,55 @@
   <th:block th:replace="~{parts/common :: javascripts()}"></th:block>
 	
 	<script>
+	/*
+		// 各要素を取得
+		const video = document.getElementById('video');
+		const canvas = document.getElementById('canvas');
+		//const captureButton = document.getElementById('captureButton');
+		const captureButton = document.querySelector('#camera-photo');
+		const context = canvas.getContext('2d');
+
+		// カメラ映像の取得
+		navigator.mediaDevices.getUserMedia({ video: true })
+		    .then(stream => {
+		        video.srcObject = stream;
+		    })
+		    .catch(error => {
+		        console.error("カメラのアクセスに失敗しました:", error);
+		    });
+
+		// 撮影ボタンクリック時の処理
+		captureButton.addEventListener('click', () => {
+		    // キャンバスに現在の映像を描画
+		    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+		    // 画像データをBase64形式で取得
+		    const imageData = canvas.toDataURL('image/png');
+
+		    // JavaScriptで直接コントローラーに送信
+		    sendImageToServer(imageData);
+		});
+
+		function sendImageToServer(imageData) {
+		    // 画像データをPOSTリクエストで送信
+		    fetch('/upload', {
+		        method: 'POST',
+		        headers: {
+		            'Content-Type': 'application/json'
+		        },
+		        body: JSON.stringify({ image: imageData })
+		    })
+		    .then(response => response.text())
+		    .then(message => {
+		        //alert(message);
+		    })
+		    .catch(error => {
+		        console.error('送信エラー:', error);
+		    });
+		}
+*/
+		
+		
 		const video = document.querySelector('#video');
 		const canvas = document.createElement('canvas');
 		const button = document.querySelector('#camera-photo');
@@ -97,7 +146,7 @@
 		//initPhoto();
 		// cameraの起動・静止を押したとき
 		button.addEventListener('click', () => {
-			if (isCameraRunning) {
+			if (isCameraRunning) {	//	camera起動中の場合
 				try {
 					var obj = document.getElementById("none");
 					obj.id = "photo";
@@ -106,21 +155,27 @@
 				} finally {
 					initPhoto();
 				}	
-				getPhoto();
-				disableCamera();
+				getPhoto();		// 静止画を取り込む
+				disableCamera();	// cameraをoffにして、カメラと静止画の表示階層を変更
+				
+				// 画像データをBase64形式で取得
+				var imageData = canvas.toDataURL('image/jpeg');
+				//JavaScriptで直接コントローラーに送信
+				sendImageToServer(imageData);
+				
 				if (video.style.zIndex = 3) {
 					video.style.zIndex = 1;
 				}
 				
-			} else {
-				enableCamera();
-				if (video.style.zIndex = 1) {
+			} else {	//カメラが停止している時
+				enableCamera();		// カメラをONにして,video	を最前面へ
+				if (video.style.zIndex = 1) {	
 					video.style.zIndex = 3;
 				}
 				
 				console.log("cameraStart");
 			}
-			isCameraRunning = !isCameraRunning;
+			isCameraRunning = !isCameraRunning;　カメラ動作フラグを反転
 		});
 
 		
@@ -169,12 +224,15 @@
 		    const context = canvas.getContext("2d");
 		    context.drawImage(video, 0, 0, canvas.width, canvas.height);
 		    document.querySelector("#photo").src = canvas.toDataURL("image/png");
+				
+				
+				
 		}
 
-		/**
-		 * 描画サイズの計算
-		 * 縦横比が撮影(video)が大きい時は撮影の縦基準、それ以外は撮影の横基準で計算
-		 */
+		
+		// * 描画サイズの計算
+		// * 縦横比が撮影(video)が大きい時は撮影の縦基準、それ以外は撮影の横基準で計算
+		 
 		function calcDrawSize() {
 		    let videoRatio = video.videoHeight / video.videoWidth;
 		    let viewRatio = video.clientHeight / video.clientWidth;
@@ -183,7 +241,23 @@
 		        : { height: video.clientWidth * videoRatio, width: video.clientWidth }
 		}
 			
-		
+		function sendImageToServer(imageData) {
+				    // 画像データをPOSTリクエストで送信
+				    fetch('/upload', {
+				        method: 'POST',
+				        headers: {
+				            'Content-Type': 'application/json'
+				        },
+				        body: JSON.stringify({ image: imageData })
+				    })
+				    .then(response => response.text())
+				    .then(message => {
+				        alert(message);
+				    })
+				    .catch(error => {
+				        console.error('送信エラー:', error);
+				    });
+				}
 				
 	</script>
 </body>

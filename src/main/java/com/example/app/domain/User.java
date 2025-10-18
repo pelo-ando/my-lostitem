@@ -2,8 +2,10 @@ package com.example.app.domain;
 
 import java.time.LocalDateTime;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+
+import com.example.app.validation.LoginGroup;
 
 import lombok.Data;
 
@@ -11,17 +13,17 @@ import lombok.Data;
 public class User {
 	
 	private Integer id;
-	@NotNull
-	@Size(max = 30)
+	@NotBlank(groups = {LoginGroup.class})
+	@Size(max = 30, groups = {LoginGroup.class})
 	private String loginId;
-	@NotNull
-	@Size(max = 60)
+	@NotBlank(groups = {LoginGroup.class})
+	@Size(max = 60, groups = {LoginGroup.class})
 	private String loginPass;
-	@NotNull
-	@Size(max = 30)
+	@NotBlank(groups = {LoginGroup.class})
+	@Size(max = 30, groups = {LoginGroup.class})
 	private String name;
-	@NotNull
-	@Size(max = 10)
+	@NotBlank(groups = {LoginGroup.class})
+	@Size(max = 10, groups = {LoginGroup.class})
 	private String userType;
 	
 	private LocalDateTime registerAt;

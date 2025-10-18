@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +24,7 @@ import com.example.app.service.ItemTypeService;
 import com.example.app.service.LostItemService;
 import com.example.app.service.StrageService;
 import com.example.app.service.UpdateInfoService;
+import com.example.app.validation.ItemGroup;
 
 import lombok.RequiredArgsConstructor;
 
@@ -64,14 +66,13 @@ public class LostItemController {
 				model.addAttribute("updateInfo",updateInfoService.getUpdateInfoById(id));
 				System.out.println("show-findById成功");
 				// file check
-				String fileName;
-				fileName = "animal" + Integer.toString(id) + ".jpg";
-//				System.out.println("fileName : " + fileName);
-//				System.out.println(isPhoto(fileName));
-				if (isPhoto(fileName)) {
-					fileName = "";
-				}
-				model.addAttribute("fname", fileName);
+//				File showImg= new File("photo_" + Integer.toString(id) + ".jpg");
+				String showImg = "photo_" + Integer.toString(id) + ".jpg";
+//				System.out.println(isPhoto(base64Data));
+//				if (isPhoto(base64Data)) {
+//					fileName = "";
+//				}
+				model.addAttribute("name", showImg);
 				return "/user/show-lostitem";
 	}
 	
@@ -83,17 +84,31 @@ public class LostItemController {
 			model.addAttribute("strageList", strageService.getStrageList());
 			model.addAttribute("heading", "忘れ物の登録");
 			model.addAttribute("updateInfo", new UpdateInfo());
-			
+			//
+//			File fileImg = new File("/gallery/animal" + "001" + ".jpg");
+//			try {
+//				byte[] byteImg = Files.readAllBytes(fileImg.toPath());
+//				String base64Data = Base64.getEncoder().encodeToString(byteImg);
+//				model.addAttribute("base64Data", "data:image/jpg;base64," + base64Data);
+//			} catch(IOException e) {
+//				return null;
+//			}
+			// コンストラクタを使用
+//			ResponseEntity<String> base64Data = new ResponseEntity<>("Hello", HttpStatus.OK);
+
+			// 静的メソッドを使用
+			//ResponseEntity<String> response2 = ResponseEntity.ok("Success!");
+			//ResponseEntity<String> base64Data;
+//			model.addAttribute("base64Data", base64Data);
 			return "user/save-lostitem";
-			
+		
 	}
 
 	// 追加画面で保存ボタンが押された時
 	@PostMapping("/user/add")
 	public String add(
-					@Valid LostItem lostItem,
-					@Valid String fname ,
-					
+					@Validated(ItemGroup.class) LostItem lostItem,
+					//@Valid ResponseEntity<String> base64Data ,
 					Errors errors,
 					Model model,
 					RedirectAttributes redirectAttributes) throws Exception {
@@ -108,12 +123,21 @@ public class LostItemController {
 				}
 				
 				service.addLostItem(lostItem);
-				System.out.println("addLostItem成功");
-				redirectAttributes.addFlashAttribute("message", "忘れ物を新規登録しました。");
 				//
 				// 画像が取り込まれている時は、画像を保存する
 				//
-				System.out.println("「imgPath」: " + fname);
+				File oldFile = new File(UPLOAD_DIRECTORY + "/temp.jpg");
+				File newFile = new File(UPLOAD_DIRECTORY + "/photo_"+ Integer.toString(lostItem.getId()) + ".jpg");
+//	            
+				if(oldFile.renameTo(newFile)) {
+					System.out.println("変更OK");
+				}else {
+					System.out.println("変更失敗");
+				}
+				
+				
+				
+				redirectAttributes.addFlashAttribute("message", "忘れ物を新規登録しました。");
 				// 追加後に戻るページ
 				int totalPages = service.getTotalPages(NUM_PER_PAGE);
 				return "redirect:/user/list?page=" + totalPages;
@@ -130,13 +154,13 @@ public class LostItemController {
 				model.addAttribute("updateInfo" , updateInfoService.getUpdateInfoById(id));
 				model.addAttribute("heading", "忘れ物の編集");
 				// file check
-				String fileName = "animal" + id.toString() + ".jpg";
+				String base64Data = "/gallery/photo_" + id.toString() + ".jpg";
 //				System.out.println("fileName : " + fileName);
 //				System.out.println(isPhoto(fileName));
-				if (isPhoto(fileName)) {
-					fileName = "";
-				}
-				model.addAttribute("fname", fileName);
+//				if (isPhoto(base64Data)) {
+//					base64Data = "";
+//				}
+				model.addAttribute("base64Data", base64Data);
 				return "/user/save-lostitem";
 	}
 	
@@ -146,7 +170,7 @@ public class LostItemController {
 					@PathVariable Integer id,
 					@Valid LostItem lostItem,
 					@Valid UpdateInfo updateinfo,
-					@Valid String fname ,
+					@Valid String base64Data ,
 					Errors errors,
 					Model model,
 					RedirectAttributes redirectAttributes) throws Exception {
@@ -169,7 +193,7 @@ public class LostItemController {
 				//
 				// 画像が取り込まれている時は、画像を保存する
 				//
-				System.out.println("「imgPath」: " + fname);
+				    
 				// 編集後に戻るページ
 				int previousPage = (int) session.getAttribute("page");
 				return "redirect:/user/list?page=" + previousPage;

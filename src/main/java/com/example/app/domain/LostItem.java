@@ -3,11 +3,14 @@ package com.example.app.domain;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
+
+import com.example.app.validation.ItemGroup;
 
 import lombok.Data;
 
@@ -16,16 +19,16 @@ public class LostItem {
 
 	
 	private int id;
-//	@NotBlank
-	@PastOrPresent
+	@NotNull(groups = {ItemGroup.class})
+	@PastOrPresent(groups = {ItemGroup.class})
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate findDate;
-	@NotNull
-	@Size(max = 30)
+	@NotBlank(groups = {ItemGroup.class})
+	@Size(max = 30, groups = {ItemGroup.class})
 	private String content;
-	@NotNull
-	@Size(max =10)
-	private String findPersonName;
+	@NotBlank(groups = {ItemGroup.class})
+	@Size(max =10, groups = {ItemGroup.class})
+	private String findPersonName; 
 	private String status;
 	private String memo;
 	private LocalDateTime registerAt;
