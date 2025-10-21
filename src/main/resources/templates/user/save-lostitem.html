@@ -53,10 +53,11 @@
               </select>
           </p>
 					
+					
 <!--      ここに写真ね"！-->
 					<div class="camera">
-						<video id="video"></video>
-						<img id="photo" th:src="${base64Data}" alt="写真はありません。" width=240px height=180px>
+						<video id="video" th:unless="${name == null}"></video>
+						<img id="photo" th:src="@{/gallery/{img}(img=${name})}">
 					</div>					
 						<button id="camera-photo" type="button">ｶﾒﾗ起動</button>
 
@@ -212,7 +213,7 @@
 		    canvas.height = video.clientHeight;
 		    const context = canvas.getContext("2d");
 		    context.fillRect(0, 0, canvas.width, canvas.height);
-		    document.querySelector("#photo").src = canvas.toDataURL("image/png");
+		    document.querySelector("#photo").src = canvas.toDataURL("image/jpeg");
 		}
 
 		//写真の撮影描画
@@ -223,7 +224,7 @@
 		    canvas.height = drawSize.height;
 		    const context = canvas.getContext("2d");
 		    context.drawImage(video, 0, 0, canvas.width, canvas.height);
-		    document.querySelector("#photo").src = canvas.toDataURL("image/png");
+		    document.querySelector("#photo").src = canvas.toDataURL("image/jpeg");
 				
 				
 				

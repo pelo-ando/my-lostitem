@@ -54,7 +54,6 @@ public class LostItemController {
 			// 他のページから戻る際に利用
 			session.setAttribute("page", page);
 			model.addAttribute("totalPages", service.getTotalPages(NUM_PER_PAGE));
-		System.out.println("getLostItemByPage成功 " );
 		return "/user/lostitem";
 	}
 	
@@ -66,13 +65,23 @@ public class LostItemController {
 				model.addAttribute("updateInfo",updateInfoService.getUpdateInfoById(id));
 				System.out.println("show-findById成功");
 				// file check
-//				File showImg= new File("photo_" + Integer.toString(id) + ".jpg");
 				String showImg = "photo_" + Integer.toString(id) + ".jpg";
-//				System.out.println(isPhoto(base64Data));
-//				if (isPhoto(base64Data)) {
-//					fileName = "";
-//				}
-				model.addAttribute("name", showImg);
+				// アップロードされているファイルのリストの取得
+				String fileName = null;
+				File uploadsDirectory = new File(UPLOAD_DIRECTORY);
+				File[] fileList = uploadsDirectory.listFiles();
+				
+				List <String> fileNames = Arrays.stream(fileList)
+						.map(file -> file.getName()).toList();
+				//
+				for (String name : fileNames) {
+					if (name.equals(showImg)) {
+						fileName = name;
+						break;
+					}
+				}
+//				model.addAttribute("idName", showImg);
+				model.addAttribute("name", fileName);
 				return "/user/show-lostitem";
 	}
 	
@@ -85,21 +94,7 @@ public class LostItemController {
 			model.addAttribute("heading", "忘れ物の登録");
 			model.addAttribute("updateInfo", new UpdateInfo());
 			//
-//			File fileImg = new File("/gallery/animal" + "001" + ".jpg");
-//			try {
-//				byte[] byteImg = Files.readAllBytes(fileImg.toPath());
-//				String base64Data = Base64.getEncoder().encodeToString(byteImg);
-//				model.addAttribute("base64Data", "data:image/jpg;base64," + base64Data);
-//			} catch(IOException e) {
-//				return null;
-//			}
-			// コンストラクタを使用
-//			ResponseEntity<String> base64Data = new ResponseEntity<>("Hello", HttpStatus.OK);
-
-			// 静的メソッドを使用
-			//ResponseEntity<String> response2 = ResponseEntity.ok("Success!");
-			//ResponseEntity<String> base64Data;
-//			model.addAttribute("base64Data", base64Data);
+			
 			return "user/save-lostitem";
 		
 	}
@@ -154,13 +149,23 @@ public class LostItemController {
 				model.addAttribute("updateInfo" , updateInfoService.getUpdateInfoById(id));
 				model.addAttribute("heading", "忘れ物の編集");
 				// file check
-				String base64Data = "/gallery/photo_" + id.toString() + ".jpg";
-//				System.out.println("fileName : " + fileName);
-//				System.out.println(isPhoto(fileName));
-//				if (isPhoto(base64Data)) {
-//					base64Data = "";
-//				}
-				model.addAttribute("base64Data", base64Data);
+				String showImg = "photo_" + Integer.toString(id) + ".jpg";
+				// アップロードされているファイルのリストの取得
+				String fileName = null;
+				File uploadsDirectory = new File(UPLOAD_DIRECTORY);
+				File[] fileList = uploadsDirectory.listFiles();
+				
+				List <String> fileNames = Arrays.stream(fileList)
+						.map(file -> file.getName()).toList();
+				//
+				for (String name : fileNames) {
+					if (name.equals(showImg)) {
+						fileName = name;
+						break;
+					}
+				}
+//				model.addAttribute("idName", showImg);
+				model.addAttribute("name", fileName);
 				return "/user/save-lostitem";
 	}
 	
@@ -193,6 +198,7 @@ public class LostItemController {
 				//
 				// 画像が取り込まれている時は、画像を保存する
 				//
+				
 				    
 				// 編集後に戻るページ
 				int previousPage = (int) session.getAttribute("page");
@@ -202,26 +208,21 @@ public class LostItemController {
 	
 
 		// 画像があるかないか まだ機能していない！
-		public boolean isPhoto (String imgName) {
+		public String setImgFileName (String imgName) {
 			// アップロードされているファイルのリストの取得
-			boolean result = false;
+			String fileName = "";
 			File uploadsDirectory = new File(UPLOAD_DIRECTORY);
 			File[] fileList = uploadsDirectory.listFiles();
 			
 			List <String> fileNames = Arrays.stream(fileList)
 					.map(file -> file.getName()).toList();
-			
-			// foreach
-			for (String item : fileNames) {
-				
-				System.out.println("item : " + item + ",imgName :" + imgName);
-				if (item == imgName) {
-					result = true;
+			//
+			for (String name : fileNames) {
+				if (name.equals(imgName)) {
+					fileName = name;
 					break;
-				} else {
-					System.out.println("false!");
 				}
 			}
-			return result;
+			return fileName;
 		}
 }

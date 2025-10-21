@@ -12,10 +12,13 @@
 	      <table class="table table-bordered">
 	        <tbody>
 						<tr>
+							<th>画像</th>
 							<td>
-							<div style="width:240px; height:200px;">
-									<img th:src="@{/gallery/{img}(img=${name})}" alt="写真はありません。" width=240px height=200px>
-							</div>
+								<div style="width:240px; height:180px;">
+								<div th:unless="${name == null}">
+									<img th:src="@{/gallery/{img}(img=${name})}" style="width:240px; height:180px;">
+								</div>		
+								</div>
 							</td>
 						</tr>
 	          <tr>

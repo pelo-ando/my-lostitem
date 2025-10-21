@@ -5,11 +5,8 @@ import java.io.IOException;
 import java.util.Base64;
 import java.util.Map;
 
-import jakarta.servlet.http.HttpSession;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -20,14 +17,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CaptureController {
 	
-	private final HttpSession session;
+	//private final HttpSession session;
 	private static final String UPLOAD_DIRECTORY =	"C:/Users/moand/gallery";
 	
-	@GetMapping("/")
-	public String show () {
-		return "capture";
-	}
-
+	
     @PostMapping("/upload")
     @ResponseBody
     public ResponseEntity<String> uploadImage(@RequestBody Map<String, String> payload) {
@@ -41,7 +34,7 @@ public class CaptureController {
 
             // パスとファイル名をここで指定すればいいのね！ここではダメ！！
             //String filePath = "";//"captured_image.png";
-            String filePath = UPLOAD_DIRECTORY +""+ "/temp.jpg";
+            String filePath = UPLOAD_DIRECTORY + "/temp.jpg";
 //            System.out.println(base64Image);
             //session.setAttribute("imgData", imageData);
             // 画像をファイルに保存
