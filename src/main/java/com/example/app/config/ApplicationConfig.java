@@ -10,7 +10,7 @@ public class ApplicationConfig implements WebMvcConfigurer {
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/gallery/**")
-		.addResourceLocations("file:///C:Users/moand/gallery/");
+		.addResourceLocations("file:///C:Users/moand/img_gallery/");
 	}
 	
 }

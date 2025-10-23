@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 public class CaptureController {
 	
 	//private final HttpSession session;
-	private static final String UPLOAD_DIRECTORY =	"C:/Users/moand/gallery";
+	private static final String UPLOAD_DIRECTORY =	"C:/Users/moand/img_gallery";
 	
 	
     @PostMapping("/upload")

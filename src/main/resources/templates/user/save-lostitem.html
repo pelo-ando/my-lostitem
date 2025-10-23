@@ -56,13 +56,14 @@
 					
 <!--      ここに写真ね"！-->
 					<div class="camera">
-						<video id="video" th:unless="${name == null}"></video>
-						<img id="photo" th:src="@{/gallery/{img}(img=${name})}">
+						<video id="video" ></video>
+						<img id="photo" th:unless="${name == null}" th:src="@{/gallery/{img}(img=${name})}" style="width:240px; height:180px;">
+						<img id="photo" th:if="${name == null}">
 					</div>					
 						<button id="camera-photo" type="button">ｶﾒﾗ起動</button>
 
           <div class="mb-3">
-              <label>拾得者名：<input type="text" size="50" th:field="*{findPersonName}"></label>
+              <label>拾得者名：<input type="text" size="10" th:field="*{findPersonName}"></label>
               <div class="error-message mt-2" th:errors="*{findPersonName}"></div>
           </div>
       
@@ -71,14 +72,17 @@
                   <option th:each="strage : ${strageList}" th:value="${strage.id}">[[${strage.name}]]</option>
               </select>
           </p>
-					<div>対応履歴
+					
+					<div>
+					<th:block th:unless="${currentUri == '/user/add'}">		<!-- /user/addからのリクエスト時は非表示-->
+						<p>変更履歴</p>
 						<ul th:object="${updateInfo}">
-							<th:block th:if="${updateInfo != null}">
 								<li th:each="info : ${updateInfo}">[[${info.memo}]]: [[${info.updateAt}]] by [[${info.modifyPersonName}]]</li>
-							</th:block>
 						</ul>
+					</th:block>
       		</div>
-          <input class="btn btn-primary" type="submit" value="保存する">
+          
+					<input class="btn btn-primary" type="submit" value="保存する">
           <a th:href="@{/user/list(page=${session.page})}" class="btn btn-secondary">キャンセル</a>
 <!--          <a th:href="@{/itemlist/list(page=${session.page})}" class="btn btn-secondary">キャンセル</a>-->
         </form>

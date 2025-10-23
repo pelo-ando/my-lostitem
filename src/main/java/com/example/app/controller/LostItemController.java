@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
@@ -42,7 +43,7 @@ public class LostItemController {
 	private final UpdateInfoService updateInfoService;
 	private final HttpSession session;
 	
-	private static final String UPLOAD_DIRECTORY = "C:/Users/moand/gallery";
+	private static final String UPLOAD_DIRECTORY = "C:/Users/moand/img_gallery";
 	
 	@GetMapping("/user/list")
 	public String showLostItemList(
@@ -86,7 +87,7 @@ public class LostItemController {
 	}
 	
 	@GetMapping("/user/add")
-	public String add(Model model) throws Exception{
+	public String add( HttpServletRequest request, Model model) throws Exception{
 			model.addAttribute("lostItem", new LostItem());
 			model.addAttribute("itemTypeList", itemTypeService.getItemTypeList());
 			model.addAttribute("areaList", areaService.getAreaList());
@@ -94,7 +95,11 @@ public class LostItemController {
 			model.addAttribute("heading", "忘れ物の登録");
 			model.addAttribute("updateInfo", new UpdateInfo());
 			//
-			
+			String currentUri = request.getRequestURI().toString();
+			model.addAttribute("currentUri", currentUri);
+			//
+			String fileName = null;
+			model.addAttribute("name", fileName);
 			return "user/save-lostitem";
 		
 	}
@@ -103,7 +108,7 @@ public class LostItemController {
 	@PostMapping("/user/add")
 	public String add(
 					@Validated(ItemGroup.class) LostItem lostItem,
-					//@Valid ResponseEntity<String> base64Data ,
+//					@RequestParam MultipartFile name,
 					Errors errors,
 					Model model,
 					RedirectAttributes redirectAttributes) throws Exception {
@@ -141,6 +146,7 @@ public class LostItemController {
 	@GetMapping("/user/edit/{id}")
 	public String edit(
 					@PathVariable Integer id,
+					HttpServletRequest request,
 					Model model) throws Exception{
 				model.addAttribute("lostItem",service.getLostItemById(id));
 				model.addAttribute("itemTypeList", itemTypeService.getItemTypeList());
@@ -148,6 +154,10 @@ public class LostItemController {
 				model.addAttribute("strageList", strageService.getStrageList());
 				model.addAttribute("updateInfo" , updateInfoService.getUpdateInfoById(id));
 				model.addAttribute("heading", "忘れ物の編集");
+				//URI取得して渡す
+				String currentUri = request.getRequestURI().toString();
+				model.addAttribute("currentUri", currentUri);
+
 				// file check
 				String showImg = "photo_" + Integer.toString(id) + ".jpg";
 				// アップロードされているファイルのリストの取得
@@ -175,7 +185,7 @@ public class LostItemController {
 					@PathVariable Integer id,
 					@Valid LostItem lostItem,
 					@Valid UpdateInfo updateinfo,
-					@Valid String base64Data ,
+//					@Valid String base64Data ,
 					Errors errors,
 					Model model,
 					RedirectAttributes redirectAttributes) throws Exception {
