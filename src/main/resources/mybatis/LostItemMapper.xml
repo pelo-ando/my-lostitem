@@ -12,8 +12,8 @@
 		<result property="memo" column="memo" />
 		<result property="registerAt" column="register_at" />
 		<result property="updateAt" column="update_at" />
-		<result property="typeId" column="type_id"/>
-		<result property="typeName" column="type_name" />
+<!--		<result property="typeId" column="type_id"/>-->
+<!--		<result property="typeName" column="type_name" />-->
 		<result property="areaId" column="area_id"/>
 		<result property="areaName" column="area_name" />
 		<result property="strageId" column="strage_id"/>
@@ -25,18 +25,19 @@
 		SELECT	lostitems.id, lostitems.find_date, lostitems.content,
 						lostitems.status, lostitems.find_person_name,
 						lostitems.memo, lostitems.register_at, lostitems.update_at,
-						item_types.id AS type_id,
-						item_types.name AS type_name,
+<!--						item_types.id AS type_id,-->
+<!--						item_types.name AS type_name,-->
 						areas.id AS area_id,
 						areas.name AS area_name,
 						strages.id AS strage_id,
 						strages.name AS strage_name
 		FROM lostitems
-		JOIN item_types
+<!--		JOIN item_types-->
 		JOIN areas
 		JOIN strages
-			ON lostitems.type_id = item_types.id and lostitems.area_id = areas.id and
-					lostitems.strage_id = strages.id 
+			ON  lostitems.area_id = areas.id and
+					lostitems.strage_id = strages.id
+<!--					lostitems.type_id = item_types.id and -->
 	</sql>
 					
 	<select id="findAll" resultMap="lostitemMap">
@@ -63,11 +64,12 @@
 			INSERT 	INTO lostitems 
 									(find_date, content, find_person_name,
 									memo, register_at,
-									type_id, area_id, strage_id
+									 area_id, strage_id
 									)
+<!--									type_id,-->
 							VALUES (#{findDate}, #{content},#{findPersonName},
 											#{memo}, NOW(),
-											#{typeId}, #{areaId}, #{strageId})
+											#{areaId}, #{strageId})
 	</insert>
 
 	<update id="update" parameterType="LostItem">
@@ -77,11 +79,11 @@
 						find_person_name = #{findPersonName},
 						memo = #{memo},
 						register_at = NOW(),
-						type_id = #{typeId},
 						area_id = #{areaId},
 						strage_id = #{strageId}
 			WHERE lostitems.id = #{id} 
 	</update>
+<!--						type_id = #{typeId},-->
 	
 
 </mapper>

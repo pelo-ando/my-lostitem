@@ -89,7 +89,7 @@ public class LostItemController {
 	@GetMapping("/user/add")
 	public String add( HttpServletRequest request, Model model) throws Exception{
 			model.addAttribute("lostItem", new LostItem());
-			model.addAttribute("itemTypeList", itemTypeService.getItemTypeList());
+//			model.addAttribute("itemTypeList", itemTypeService.getItemTypeList());
 			model.addAttribute("areaList", areaService.getAreaList());
 			model.addAttribute("strageList", strageService.getStrageList());
 			model.addAttribute("heading", "忘れ物の登録");
@@ -114,7 +114,7 @@ public class LostItemController {
 					RedirectAttributes redirectAttributes) throws Exception {
 				
 				if (errors.hasErrors()) {
-					model.addAttribute("itemTypeList", itemTypeService.getItemTypeList());
+//					model.addAttribute("itemTypeList", itemTypeService.getItemTypeList());
 					model.addAttribute("areaList", areaService.getAreaList());
 					model.addAttribute("strageList", strageService.getStrageList());
 					model.addAttribute("heading", "忘れ物の登録");
@@ -149,7 +149,7 @@ public class LostItemController {
 					HttpServletRequest request,
 					Model model) throws Exception{
 				model.addAttribute("lostItem",service.getLostItemById(id));
-				model.addAttribute("itemTypeList", itemTypeService.getItemTypeList());
+//				model.addAttribute("itemTypeList", itemTypeService.getItemTypeList());
 				model.addAttribute("areaList", areaService.getAreaList());
 				model.addAttribute("strageList", strageService.getStrageList());
 				model.addAttribute("updateInfo" , updateInfoService.getUpdateInfoById(id));

@@ -35,8 +35,8 @@ public class LostItem {
 	private LocalDateTime updateAt;
 	
 	// 忘れ物分類	
-	private int typeId;
-	private String typeName;
+//	private int typeId;
+//	private String typeName;
 	
 	//	拾得場所
 	private int  areaId;
